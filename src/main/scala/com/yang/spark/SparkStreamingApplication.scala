@@ -17,10 +17,10 @@ object SparkStreamingApplication {
     val conf = new SparkConf().setAppName("spark-streaming-application").setMaster("local[*]")
     val streamingContext = new StreamingContext(conf, Seconds(5))
 
-    // streamingContext.checkpoint("checkpoint") 10.124.210.54:9092,10.124.210.54:9093,
+    // streamingContext.checkpoint("checkpoint")
 
     val kafkaParams = Map[String, Object](
-      "bootstrap.servers" -> "localhost:9092,localhost:9093,localhost:9092,localhost:9093",
+      "bootstrap.servers" -> "localhost:9092",
       "key.deserializer" -> classOf[StringDeserializer],
       "value.deserializer" -> classOf[ByteArrayDeserializer],
       "sasl.mechanism" -> "PLAIN",
@@ -37,7 +37,7 @@ object SparkStreamingApplication {
       Subscribe[String, Array[Byte]](topics, kafkaParams)
     )
 
-    val spans: DStream[java.util.List[Span]] = stream.map { case cr => SpanBytesDecoder.JSON_V2.decodeList(cr.value()) }
+    val spans: DStream[java.util.List[zipkin2.Span]] = stream.map { case cr => SpanBytesDecoder.JSON_V2.decodeList(cr.value()) }
 
     val count = spans.map(println).count()
 

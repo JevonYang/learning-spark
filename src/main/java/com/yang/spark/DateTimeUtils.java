@@ -46,6 +46,10 @@ public class DateTimeUtils {
         return LocalDateTime.of(time.toLocalDate(), LocalTime.of(time.getHour(), 0)).format(DateTimeFormatter.ISO_DATE_TIME);
     }
 
+    public static long oneDayBeforeInTimestamp() {
+        return getTimestampOfDateTime(LocalDateTime.now()) - ONE_DAY;
+    }
+
     public static List<Long> last24HoursInTimeStamp() {
         long nowTimestampWithoutMinute = DateTimeUtils.dropMinutesAndAfter(LocalDateTime.now());
         long oneDayBefore = nowTimestampWithoutMinute - ONE_DAY;
